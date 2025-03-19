@@ -225,11 +225,19 @@ document.addEventListener("DOMContentLoaded", () => {
           } else {
             modelSelect.value = syncResult.model;
           }
-          systemPromptInput.value = syncResult.systemPrompt || `Read the message in the provided screenshot and craft a professional yet natural response.
-           Keep it clear, concise, and engaging—just like a thoughtful human reply. Address the key points or questions directly, and keep the tone warm and 
-           personable while staying professional. Wrap up with a relevant follow-up question that shows genuine curiosity and keeps the conversation flowing.
-           Ignore any surrounding text that isn’t part of the main conversation.`;
-        }
+          systemPromptInput.value = syncResult.systemPrompt || `
+          Write a response as a person replying to a message based on the context provided in the screenshot. 
+
+            Craft a reply:
+          - Be written in second person, addressing the recipient directly.
+          - Be concise and professional (ideally 2-3 sentences).
+          - Respond naturally and in character, as if you were the sender of the reply.
+          - Acknowledge or answer the key points in the screenshot message.
+          - Avoid explaining what the message says instead, reply as if you are the one communicating and responding.
+          - Maintain a professional and courteous tone suitable for business communication.
+          - Only use information visible in the screenshot—do not assume missing context.
+          - You must write a direct response to the message in the screenshot, not a summary or analysis.
+          - Do not use — symbols in your response.`}
       );
     }
     

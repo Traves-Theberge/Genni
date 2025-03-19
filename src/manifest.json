@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "AI Reply Generator",
+  "name": "Genni - AI Reply Generator",
   "version": "1.0",
   "description": "Generate AI-powered replies using screenshots on messaging platforms.",
   "icons": {
