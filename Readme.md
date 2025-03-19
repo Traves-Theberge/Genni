@@ -1,5 +1,3 @@
-# 🤖 Genni
-
 <div align="center">
 
 ![Genni Logo](assets/Genni.png)
