@@ -2,7 +2,7 @@
 
 <div align="center">
 
-![Genni Logo](assets/logo.png)
+![Genni Logo](assets/Genni.png)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Chrome Web Store](https://img.shields.io/badge/Chrome-Extension-green)](https://chrome.google.com/webstore)
