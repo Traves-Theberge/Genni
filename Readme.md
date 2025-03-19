@@ -23,23 +23,31 @@
 - 🌐 **Cross-Platform**: Works seamlessly across major messaging platforms
 - ⌨️ **Keyboard Friendly**: Quick access with customizable shortcuts
 
-## 🚀 Quick Start
+## Installation
 
-1. **Install the Extension**
-   ```bash
-   git clone https://github.com/yourusername/Genni.git
-   cd Genni
-   ```
+# Install Genni:
+- Clone or download the repository
+- Click "Load unpacked" in your browser
+- Select the src directory from the downloaded files
+- Enable Developer Mode in your browser:
 
-2. **Set Up Your API Key**
-   - Navigate to extension options
-   - Enter your OpenAI API key
-   - Save configuration
+- Edge: Go to edge://extensions
+- Chrome: Go to chrome://extensions
+- Toggle "Developer mode" switch in the top right
+- Configure the Extension:
 
-3. **Start Using**
-   - Press `Ctrl+Shift+Z` to capture
-   - Review and edit suggested replies
-   - Insert with one click
+- Click the Genni icon in your browser toolbar
+- Open Settings and enter your OpenAI API key
+- Save your settings
+- Start generating smart replies!
+
+# Basic Usage
+- Navigate to any supported messaging platform
+- Press Ctrl+Shift+Z or click the Genni icon
+- Click "Capture Screenshot" to capture the conversation
+- Click "Generate Reply" to create an AI-powered response
+- Click "Insert Reply" to automatically insert the response
+
 
 ## 🎯 Key Features
 
