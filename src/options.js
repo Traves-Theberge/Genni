@@ -225,14 +225,10 @@ document.addEventListener("DOMContentLoaded", () => {
           } else {
             modelSelect.value = syncResult.model;
           }
-          systemPromptInput.value = syncResult.systemPrompt || `Generate a concise, professional reply based on the provided screenshot. Your response should directly address the key points in the message, remaining brief, clear, and polite. Follow these guidelines:
-
-- Start with an appropriate greeting based on the message's tone.
-- Keep the reply concise, ideally 2-3 sentences maximum.
-- Directly acknowledge or respond to the main points mentioned.
-- Maintain a courteous, professional tone suitable for a formal or business context.
-- Clearly indicate any next steps or follow-up actions if relevant.
-- Only use details clearly visible in the screenshot, avoiding assumptions about missing context.`;
+          systemPromptInput.value = syncResult.systemPrompt || `Read the message in the provided screenshot and craft a professional yet natural response.
+           Keep it clear, concise, and engaging—just like a thoughtful human reply. Address the key points or questions directly, and keep the tone warm and 
+           personable while staying professional. Wrap up with a relevant follow-up question that shows genuine curiosity and keeps the conversation flowing.
+           Ignore any surrounding text that isn’t part of the main conversation.`;
         }
       );
     }
