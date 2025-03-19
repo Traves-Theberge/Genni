@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="popup.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <title>Genni - AI Reply Generator</title>
+</head>
+<body>
+    <div class="container">
+        <div id="screenshot-container">
+            <img id="screenshotPreview" alt="Screenshot Preview" aria-label="Preview of the captured screenshot" />
+        </div>
+        
+        <textarea id="aiReply" placeholder="Generated reply will appear here." aria-label="Generated AI reply content"></textarea>
+        
+        <div class="buttons">
+            <button id="takeScreenshot" aria-label="Take a screenshot of the current tab">Capture Screenshot 📷</button>
+            <button id="generate" aria-label="Generate a reply based on the screenshot">Generate Reply ✨</button>
+            <button id="insertReply" aria-label="Insert the generated reply into the active input field">Insert Reply 📤</button>
+            <button id="copy" aria-label="Copy the generated reply to clipboard">Copy 📋</button>
+            <button id="optionsBtn" aria-label="Open options page">Settings ⚙️</button>
+        </div>
+        
+        <p id="shortcutInfo" class="shortcut-info">Hotkey: Press Ctrl+Shift+Z to open Genni</p>
+    </div>
+    
+    <div id="toast" role="alert"></div>
+    
+    <script src="popup.js"></script>
+</body>
+</html>

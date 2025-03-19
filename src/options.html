@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="options.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <title> Genni - AI Reply Generator - Options</title>
+</head>
+<body>
+  <div class="container">
+    <h2>Settings – Genni - AI Reply Generator</h2>
+    
+    <!-- Settings Form -->
+    <div class="input-group">
+      <label for="apiKey">OpenAI API Key</label>
+      <div class="api-key-container">
+        <input type="password" id="apiKey" placeholder="Your OpenAI API Key">
+        <button id="showKey" class="icon-btn" title="Show/Hide API Key">👁️</button>
+        <button id="testKey" class="icon-btn" title="Test API Key">🔍</button>
+      </div>
+      <div class="api-help">
+        <small>Get your API key from <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer">OpenAI API Keys</a></small>
+      </div>
+    </div>
+    
+    <div class="input-group">
+      <label for="model">AI Model</label>
+      <select id="model">
+        <option value="gpt-4o-mini">GPT-4o-mini (Cheap and Fast)</option>
+        <option value="gpt-4o">GPT-4o (Concise)</option>
+      </select>
+    </div>
+    
+    <div class="input-group">
+      <label for="systemPrompt">System Prompt</label>
+      <textarea id="systemPrompt" placeholder="Instructions for the AI"></textarea>
+    </div>
+    
+    <button id="save">Save Settings 🔑</button>
+    <p id="status"></p>
+    
+    <!-- Collapsible sections -->
+    <div class="tutorial-container">
+      <div class="tutorial-header">
+        <h3>Getting Started</h3>
+        <button id="toggleTutorial" class="toggle-btn">Show Tutorial</button>
+      </div>
+      
+      <div id="tutorial" class="tutorial-content hidden">
+        <div class="step">
+          <div class="step-number">1</div>
+          <div class="step-content">
+            <h4>Set your OpenAI API Key</h4>
+            <p>Enter your API key from the OpenAI dashboard. Required for Genni to work.</p>
+          </div>
+        </div>
+        
+        <div class="step">
+          <div class="step-number">2</div>
+          <div class="step-content">
+            <h4>Choose your AI Model</h4>
+            <p>GPT-4o-mini is cheaper/faster, while GPT-4o provides better quality responses.</p>
+          </div>
+        </div>
+        
+        <div class="step">
+          <div class="step-number">3</div>
+          <div class="step-content">
+            <h4>Customize Prompt (Optional)</h4>
+            <p>Modify the instructions given to the AI. Default is optimized for professional replies.</p>
+          </div>
+        </div>
+        
+        <div class="step">
+          <div class="step-number">4</div>
+          <div class="step-content">
+            <h4>Using Genni</h4>
+            <p>Click the extension icon or use Ctrl+Shift+Z. Take a screenshot, generate and insert replies.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="tos-container">
+      <div class="tos-header">
+        <h3>Terms of Service</h3>
+        <button id="toggleTos" class="toggle-btn">Show Terms</button>
+      </div>
+      
+      <div id="tos" class="tos-content hidden">
+        <p><strong>By using Genni, you agree to the following:</strong></p>
+        
+        <h4>API Key Usage</h4>
+        <p>Your OpenAI API key is stored locally and only sent to OpenAI's official endpoints.</p>
+        
+        <h4>Data Privacy</h4>
+        <p>Screenshots are sent to OpenAI. Do not capture sensitive or confidential information.</p>
+        
+        <h4>Usage Responsibility</h4>
+        <p>You're responsible for content generated. The extension creator is not liable for misuse.</p>
+        
+        <h4>OpenAI Terms</h4>
+        <p>Your use is subject to <a href="https://openai.com/policies/terms-of-use" target="_blank" rel="noopener noreferrer">OpenAI's Terms of Use</a>.</p>
+        
+        <h4>Billing</h4>
+        <p>You're responsible for charges to your OpenAI account when using your API key.</p>
+      </div>
+    </div>
+    
+    <div class="footer">
+      <p class="privacy-notice">Note: Screenshots are sent to OpenAI for processing. Make sure no sensitive information is visible.</p>
+    </div>
+  </div>
+  
+  <script src="options.js"></script>
+</body>
+</html>

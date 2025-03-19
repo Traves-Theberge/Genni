@@ -1,0 +1,348 @@
+:root {
+  --primary: #6366f1;       /* Rich indigo for primary actions */
+  --primary-light: #818cf8; /* Lighter indigo for highlights */
+  --secondary: #10b981;     /* Emerald green for success/insertion */
+  --accent: #f97316;        /* Warm orange for attention/alerts */
+  --dark: #1e293b;          /* Slate for text */
+  --darker: #111827;        /* Darker background color */
+  --light: #f8fafc;         /* Off-white for backgrounds */
+  --gray: #94a3b8;          /* Slate gray for subtle elements */
+  --shadow: rgba(0, 0, 0, 0.1);
+  
+  /* Animation properties */
+  --transition-fast: 0.15s ease;
+  --transition-medium: 0.3s ease;
+  --transition-slow: 0.45s ease;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.96); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Dark mode is now the default */
+body {
+  font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+  width: 360px;
+  padding: 16px;
+  background: var(--darker);
+  color: white;
+  margin: 0;
+  border-radius: 12px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+  animation: scaleIn 0.3s ease;
+  min-height: 500px;
+  max-height: 550px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  height: 100%;
+}
+
+#screenshot-container {
+  position: relative;
+  background: #252a37;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  overflow: hidden;
+  height: 160px;
+  animation: fadeIn 0.4s ease;
+}
+
+#screenshotPreview {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+  transition: transform var(--transition-medium);
+}
+
+#screenshotPreview:hover {
+  transform: scale(1.05);
+}
+
+.placeholder-message {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 13px;
+  line-height: 1.4;
+  background: #252a37;
+  box-sizing: border-box;
+  animation: fadeIn 0.5s ease;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+
+#aiReply {
+  width: 100%;
+  height: 120px;
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  resize: vertical;
+  font-family: inherit;
+  font-size: 14px;
+  line-height: 1.5;
+  color: white;
+  background: #252a37;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  animation: fadeIn 0.5s ease 0.1s both;
+  box-sizing: border-box;
+}
+
+#aiReply:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+#aiReply::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+  opacity: 1;
+}
+
+.buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  animation: fadeIn 0.5s ease 0.2s both;
+  margin-bottom: 4px;
+}
+
+.buttons button {
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all var(--transition-fast);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Primary button - Generate Reply */
+#generate {
+  background: linear-gradient(135deg, var(--primary), var(--primary-light));
+  color: white;
+  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+}
+
+#generate:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(79, 70, 229, 0.3);
+}
+
+#generate:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(79, 70, 229, 0.2);
+}
+
+/* Take Screenshot button */
+#takeScreenshot {
+  background: #252a37;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+#takeScreenshot:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+#takeScreenshot:active {
+  transform: translateY(0);
+}
+
+/* Insert Reply button */
+#insertReply {
+  background: var(--secondary);
+  color: white;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+}
+
+#insertReply:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(16, 185, 129, 0.25);
+}
+
+#insertReply:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.15);
+}
+
+/* Copy button */
+#copy {
+  background: #252a37;
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+#copy:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+#copy:active {
+  transform: translateY(0);
+}
+
+/* Options button */
+#optionsBtn {
+  background: transparent;
+  color: rgba(255, 255, 255, 0.5);
+  padding: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  margin-top: 2px;
+}
+
+#optionsBtn:hover {
+  color: white;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Loading state for buttons */
+button.loading {
+  pointer-events: none;
+  position: relative;
+}
+
+button.loading::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0),
+    rgba(255, 255, 255, 0.15),
+    rgba(255, 255, 255, 0)
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Toast notification */
+#toast {
+  position: fixed;
+  bottom: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 10px 16px;
+  border-radius: 40px;
+  font-size: 14px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+  transition: bottom 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  max-width: 90%;
+  opacity: 0.95;
+}
+
+#toast.show {
+  bottom: 16px;
+}
+
+.shortcut-info {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 11px;
+  margin: 10px 0 6px;
+  padding: 0;
+  font-style: italic;
+  letter-spacing: 0.3px;
+  font-weight: 400;
+  width: 100%;
+}
+
+/* Light mode override */
+@media (prefers-color-scheme: light) {
+  body {
+    background: var(--light);
+    color: var(--dark);
+    box-shadow: 0 8px 30px var(--shadow);
+  }
+  
+  #screenshot-container {
+    background: white;
+    box-shadow: 0 2px 8px var(--shadow);
+  }
+  
+  .placeholder-message {
+    color: var(--dark);
+    background: white;
+  }
+  
+  #aiReply {
+    background: white;
+    border-color: rgba(79, 70, 229, 0.1);
+    color: var(--dark);
+  }
+  
+  #aiReply::placeholder {
+    color: var(--gray);
+    opacity: 0.7;
+  }
+  
+  #takeScreenshot, #copy {
+    background: white;
+    color: var(--primary);
+    border: 2px solid rgba(79, 70, 229, 0.1);
+  }
+  
+  #optionsBtn {
+    color: var(--gray);
+  }
+  
+  #optionsBtn:hover {
+    color: var(--primary);
+    background: rgba(79, 70, 229, 0.05);
+  }
+  
+  .shortcut-info {
+    color: rgba(30, 41, 59, 0.5);
+  }
+  
+  #toast {
+    background: var(--dark);
+    color: white;
+  }
+}
