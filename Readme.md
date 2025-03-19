@@ -140,17 +140,7 @@ We love your input! Check out our [Contributing Guide](CONTRIBUTING.md) to get s
 - [ ] 🌍 Multi-language support
 - [ ] 📝 Custom reply templates
 - [ ] 🤖 Advanced AI models integration
-- [ ] 📊 Analytics dashboard
-- [ ] ☁️ Cloud sync capabilities
 
-## 🆘 Support
-
-Need help? We've got you covered:
-
-- 📖 [Documentation Wiki](https://github.com/yourusername/Genni/wiki)
-- 🐛 [Issue Tracker](https://github.com/yourusername/Genni/issues)
-- 📧 [Email Support](mailto:support@genni.ai)
-- 💬 [Community Discord](https://discord.gg/genni)
 
 ## 📄 License
 
