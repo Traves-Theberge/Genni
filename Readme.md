@@ -115,13 +115,6 @@ graph TD
     E --> F[UI Injection]
 ```
 
-## 📚 Documentation
-
-- [Installation Guide](docs/installation.md)
-- [API Configuration](docs/api-config.md)
-- [Development Guide](docs/development.md)
-- [Security Best Practices](docs/security.md)
-
 ## 🔧 Advanced Configuration
 
 ```javascript
