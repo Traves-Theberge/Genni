@@ -150,8 +150,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 <div align="center">
 
-Made with ❤️ by the Genni team
-
-[Website](https://genni.ai) • [Twitter](https://twitter.com/genniAI) • [Blog](https://blog.genni.ai)
+Made with ❤️ by Traves Theberge
 
 </div>
