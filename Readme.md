@@ -10,7 +10,7 @@
 
 **Genni is your AI-powered reply companion that generates intelligent, context-aware responses using screenshot analysis and OpenAI's Vision API.**
 
-[Installation](#-installation-guide) • [Features](#-key-features) • [Documentation](#-documentation) • [Contributing](#-contributing) • [Support](#-support)
+[Installation](#-installation) • [Features](#-key-features) • [Contributing](#-contributing) • [Support](#-support)
 
 </div>
 
