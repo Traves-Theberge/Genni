@@ -10,7 +10,7 @@
 
 **Genni is your AI-powered reply companion that generates intelligent, context-aware responses using screenshot analysis and OpenAI's Vision API.**
 
-[Installation](#-Installation) • [Features](#-key-features) • [Contributing](#-contributing) • [Support](#-support)
+[Installation](#-Installation) • [Features](#-key-features) • [Contributing](#-contributing) 
 
 </div>
 
@@ -128,7 +128,7 @@ graph TD
 
 ## 🤝 Contributing
 
-We love your input! Check out our [Contributing Guide](CONTRIBUTING.md) to get started.
+We love your input!
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
