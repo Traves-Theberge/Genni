@@ -54,11 +54,6 @@
 3. Select preferred AI model
 4. Customize system prompt if desired
 
-### Response Preferences
-- **Temperature**: Adjust creativity (0.0 - 1.0)
-- **Length**: Control response length
-- **Tone**: Professional to casual
-- **Language**: Multi-language support
 
 ### Keyboard Shortcuts
 Default: `Ctrl+Shift+Z`
