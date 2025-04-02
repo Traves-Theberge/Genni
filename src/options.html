@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="options.css">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <title> Genni - AI Reply Generator - Options</title>
+  <title>Genni - AI Reply Generator - Options</title>
 </head>
 <body>
   <div class="container">
@@ -13,8 +13,9 @@
       <h1>Genni - AI Reply Generator</h1>
       <p class="subtitle">Configure your AI assistant for optimal responses</p>
     </header>
-
+    
     <main>
+      <!-- Provider Selection Card -->
       <section class="card" id="provider-selector-card">
         <div class="card-header">
           <h2>Choose AI Provider</h2>
@@ -25,20 +26,16 @@
             <div class="provider-option">
               <input type="radio" id="openai-provider" name="provider" value="openai" checked>
               <label for="openai-provider">
-                <span class="provider-logo openai-logo"></span>
                 <div>
                   <span class="provider-name">OpenAI</span>
-                  <span class="provider-description">High quality responses with GPT models</span>
                 </div>
               </label>
             </div>
             <div class="provider-option">
               <input type="radio" id="gemini-provider" name="provider" value="gemini">
               <label for="gemini-provider">
-                <span class="provider-logo gemini-logo"></span>
                 <div>
                   <span class="provider-name">Google Gemini</span>
-                  <span class="provider-description">Fast responses with free tier access</span>
                 </div>
               </label>
             </div>
@@ -63,9 +60,6 @@
             <div class="api-help">
               <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer">
                 Get your API key from OpenAI
-                <svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12">
-                  <path fill="currentColor" d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
-                </svg>
               </a>
             </div>
           </div>
@@ -98,16 +92,10 @@
             <div class="api-help">
               <a href="https://ai.google.dev/" target="_blank" rel="noopener noreferrer">
                 Get your API key from Google AI Studio
-                <svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12">
-                  <path fill="currentColor" d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
-                </svg>
               </a>
             </div>
           </div>
           <div class="info-alert">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
-              <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
-            </svg>
             Using Gemini 2.0 Flash model for vision capabilities
           </div>
         </div>
@@ -125,7 +113,6 @@
             <textarea id="systemPrompt" placeholder="Instructions for the AI"></textarea>
             <small class="hint">Customize how the AI responds to your messages</small>
           </div>
-
           <div class="form-group">
             <label for="temperature">Temperature (Creativity)</label>
             <div class="slider-container">
@@ -140,7 +127,7 @@
           </div>
         </div>
       </section>
-
+      
       <div class="action-container">
         <button id="save" class="btn btn-primary">Save Settings</button>
         <p id="status"></p>

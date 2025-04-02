@@ -21,6 +21,60 @@ document.addEventListener("DOMContentLoaded", () => {
     const tutorialContent = document.getElementById('tutorial');
     const tosContent = document.getElementById('tos');
     
+    // Update Gemini icon with the new SVG
+    const geminiLabel = document.querySelector('label[for="gemini-provider"]');
+    if (geminiLabel) {
+        // Remove existing icon if present (could be an image, SVG, or text)
+        while (geminiLabel.firstChild) {
+            geminiLabel.removeChild(geminiLabel.firstChild);
+        }
+        
+        // Create and add the new SVG
+        const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        svgElement.setAttribute("fill", "none");
+        svgElement.setAttribute("xmlns", "http://www.w3.org/2000/svg");
+        svgElement.setAttribute("viewBox", "0 0 16 16");
+        svgElement.setAttribute("width", "16");
+        svgElement.setAttribute("height", "16");
+        svgElement.style.marginRight = "8px";
+        
+        const pathElement = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        pathElement.setAttribute("d", "M16 8.016A8.522 8.522 0 008.016 16h-.032A8.521 8.521 0 000 8.016v-.032A8.521 8.521 0 007.984 0h.032A8.522 8.522 0 0016 7.984v.032z");
+        pathElement.setAttribute("fill", "url(#prefix__paint0_radial_980_20147)");
+        
+        const defsElement = document.createElementNS("http://www.w3.org/2000/svg", "defs");
+        const radialGradient = document.createElementNS("http://www.w3.org/2000/svg", "radialGradient");
+        radialGradient.setAttribute("id", "prefix__paint0_radial_980_20147");
+        radialGradient.setAttribute("cx", "0");
+        radialGradient.setAttribute("cy", "0");
+        radialGradient.setAttribute("r", "1");
+        radialGradient.setAttribute("gradientUnits", "userSpaceOnUse");
+        radialGradient.setAttribute("gradientTransform", "matrix(16.1326 5.4553 -43.70045 129.2322 1.588 6.503)");
+        
+        const stop1 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+        stop1.setAttribute("offset", ".067");
+        stop1.setAttribute("stop-color", "#9168C0");
+        
+        const stop2 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+        stop2.setAttribute("offset", ".343");
+        stop2.setAttribute("stop-color", "#5684D1");
+        
+        const stop3 = document.createElementNS("http://www.w3.org/2000/svg", "stop");
+        stop3.setAttribute("offset", ".672");
+        stop3.setAttribute("stop-color", "#1BA1E3");
+        
+        radialGradient.appendChild(stop1);
+        radialGradient.appendChild(stop2);
+        radialGradient.appendChild(stop3);
+        defsElement.appendChild(radialGradient);
+        
+        svgElement.appendChild(pathElement);
+        svgElement.appendChild(defsElement);
+        
+        geminiLabel.appendChild(svgElement);
+        geminiLabel.appendChild(document.createTextNode(" Google Gemini"));
+    }
+    
     console.log("Options page loaded");
     
     // Listen for keyboard shortcut messages from background script
@@ -44,6 +98,25 @@ document.addEventListener("DOMContentLoaded", () => {
     
     // Run animations after page loads
     setTimeout(animateCards, 100);
+    
+    // Add status message elements for API key testing
+    function addStatusElement(containerId, statusId) {
+      const container = document.querySelector(`#${containerId} .api-key-container`);
+      if (container && !document.getElementById(statusId)) {
+        const statusElement = document.createElement('p');
+        statusElement.id = statusId;
+        statusElement.className = 'api-status';
+        statusElement.style.fontSize = '0.85rem';
+        statusElement.style.marginTop = '0.5rem';
+        statusElement.style.opacity = '0';
+        statusElement.style.transition = 'opacity 0.3s ease';
+        container.insertAdjacentElement('afterend', statusElement);
+      }
+    }
+    
+    // Add status elements for API key testing
+    addStatusElement('openai-settings', 'openai-test-status');
+    addStatusElement('gemini-settings', 'gemini-test-status');
     
     // Setup radio button event listeners for provider selection
     openaiRadio.addEventListener('change', () => {
@@ -98,9 +171,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }, 300);
     }
     
-    // Toggle tutorial visibility with animation
+    // Toggle tutorial visibility (fixed implementation)
     toggleTutorialBtn.addEventListener('click', () => {
-      // First, collapse the other section if it's open
+      // First, hide the other section if it's open
       if (!tosContent.classList.contains('hidden')) {
         tosContent.classList.add('hidden');
         toggleTosBtn.textContent = 'Show Terms';
@@ -111,30 +184,18 @@ document.addEventListener("DOMContentLoaded", () => {
       
       if (isHidden) {
         tutorialContent.classList.remove('hidden');
-        tutorialContent.style.opacity = '0';
-        tutorialContent.style.maxHeight = '0';
-        
-        setTimeout(() => {
-          tutorialContent.style.opacity = '1';
-          tutorialContent.style.maxHeight = '300px';
-          scrollToElement(tutorialContent);
-        }, 10);
-        
         toggleTutorialBtn.textContent = 'Hide Tutorial';
+        // Scroll to tutorial after it's shown
+        setTimeout(() => scrollToElement(tutorialContent), 100);
       } else {
-        tutorialContent.style.opacity = '0';
-        tutorialContent.style.maxHeight = '0';
-        
-        setTimeout(() => {
-          tutorialContent.classList.add('hidden');
-          toggleTutorialBtn.textContent = 'Show Tutorial';
-        }, 300);
+        tutorialContent.classList.add('hidden');
+        toggleTutorialBtn.textContent = 'Show Tutorial';
       }
     });
     
-    // Toggle ToS visibility with animation
+    // Toggle ToS visibility (fixed implementation)
     toggleTosBtn.addEventListener('click', () => {
-      // First, collapse the other section if it's open
+      // First, hide the other section if it's open
       if (!tutorialContent.classList.contains('hidden')) {
         tutorialContent.classList.add('hidden');
         toggleTutorialBtn.textContent = 'Show Tutorial';
@@ -145,24 +206,12 @@ document.addEventListener("DOMContentLoaded", () => {
       
       if (isHidden) {
         tosContent.classList.remove('hidden');
-        tosContent.style.opacity = '0';
-        tosContent.style.maxHeight = '0';
-        
-        setTimeout(() => {
-          tosContent.style.opacity = '1';
-          tosContent.style.maxHeight = '300px';
-          scrollToElement(tosContent);
-        }, 10);
-        
         toggleTosBtn.textContent = 'Hide Terms';
+        // Scroll to ToS after it's shown
+        setTimeout(() => scrollToElement(tosContent), 100);
       } else {
-        tosContent.style.opacity = '0';
-        tosContent.style.maxHeight = '0';
-        
-        setTimeout(() => {
-          tosContent.classList.add('hidden');
-          toggleTosBtn.textContent = 'Show Terms';
-        }, 300);
+        tosContent.classList.add('hidden');
+        toggleTosBtn.textContent = 'Show Terms';
       }
     });
     
@@ -233,16 +282,16 @@ document.addEventListener("DOMContentLoaded", () => {
           setStatus("OpenAI API key is valid! ✅", false, 'openai-test-status');
         } else {
           response.json().then(data => {
-            setStatus(`API key not configured`, true, 'openai-test-status');
+            setStatus(`API key invalid or expired`, true, 'openai-test-status');
           }).catch(error => {
-            setStatus("API key not configured", true, 'openai-test-status');
+            setStatus("API key invalid or expired", true, 'openai-test-status');
           });
         }
       })
       .catch(error => {
         testKeyBtn.disabled = false;
         testKeyBtn.classList.remove('loading');
-        setStatus(`API key not configured`, true, 'openai-test-status');
+        setStatus(`API key invalid or expired`, true, 'openai-test-status');
       });
     });
     
@@ -272,16 +321,16 @@ document.addEventListener("DOMContentLoaded", () => {
           setStatus("Gemini API key is valid! ✅", false, 'gemini-test-status');
         } else {
           response.json().then(data => {
-            setStatus(`API key not configured`, true, 'gemini-test-status');
+            setStatus(`API key invalid or expired`, true, 'gemini-test-status');
           }).catch(error => {
-            setStatus("API key not configured", true, 'gemini-test-status');
+            setStatus("API key invalid or expired", true, 'gemini-test-status');
           });
         }
       })
       .catch(error => {
         testGeminiKeyBtn.disabled = false;
         testGeminiKeyBtn.classList.remove('loading');
-        setStatus(`API key not configured`, true, 'gemini-test-status');
+        setStatus(`API key invalid or expired`, true, 'gemini-test-status');
       });
     });
     
@@ -354,19 +403,37 @@ document.addEventListener("DOMContentLoaded", () => {
           temperatureSlider.value = temp * 10;
           temperatureValue.textContent = temp.toFixed(1);
           
-          systemPromptInput.value = syncResult.systemPrompt || `
-          Write a response as a person replying to a message based on the context provided in the screenshot. 
+          systemPromptInput.value = syncResult.systemPrompt || `You are an AI agent designed to compose social media replies for me, (User).
 
-            Craft a reply:
-          - Be written in second person, addressing the recipient directly.
-          - Be concise and professional (ideally 2-3 sentences).
-          - Respond naturally and in character, as if you were the sender of the reply.
-          - Acknowledge or answer the key points in the screenshot message.
-          - Avoid explaining what the message says instead, reply as if you are the one communicating and responding.
-          - Maintain a professional and courteous tone suitable for business communication.
-          - Only use information visible in the screenshot—do not assume missing context.
-          - You must write a direct response to the message in the screenshot, not a summary or analysis.
-          - Do not use — symbols in your response.`}
+Your Task: Based only on the content visible in the provided screenshot of a social media message, write the direct reply message I (User) should send.
+
+Instructions for Crafting the Reply:
+
+1.  Act as User: Write the response naturally and in character, as if you are User composing the message.
+
+2.  Direct Address: Use the second person ("you") to address the sender of the message in the screenshot directly.
+
+3.  Personalization: If the sender's name is visible in the screenshot, use it to personalize the greeting (e.g., "Hi [Name],"). Ensure this name is the one associated with the main text block identified in step 9.
+
+4.  Acknowledge and Respond: Directly address the key point(s), question(s), or sentiment(s) expressed only in the main text block identified in step 9.
+
+5.  Conciseness: Keep the reply brief and to the point, ideally 2-3 sentences.
+
+6.  Tone: Maintain a professional, courteous, positive, and empathetic tone suitable for business communication. Adapt the tone slightly based on the main text block's content: For positive feedback, express genuine appreciation and be specific if possible (e.g., "Thanks so much for your kind words about [specific aspect]!"). For negative feedback, respond promptly (in tone), acknowledge their experience with empathy (e.g., "I'm sorry to hear you experienced this."), offer a sincere apology if appropriate without being defensive, and suggest taking the conversation offline if needed (e.g., "Could you please send us a direct message with your details so we can look into this for you?"). For neutral feedback/questions, acknowledge their comment or answer their question directly, provide helpful info if possible, or ask a clarifying question.
+
+7.  Be Solution-Oriented: Where applicable, focus on being helpful and offering a clear next step or resolution path based on the main text block's content.
+
+8.  Use Main Text Content Only: Base your reply strictly on the information fully visible within the single main text block identified in step 9. Do not invent details, assume missing context, or use outside knowledge.
+
+9.  Focus on Largest Central Text Block & Sender:
+    A. Locate Main Text: Identify the largest single block of conversational text located within the main central column or feed area of the screenshot. This is likely the primary message or post.
+    B. Identify Associated Sender: Determine the sender's name or handle that is most directly and closely associated with that specific text block. Look for the name immediately preceding or clearly linked to that block.
+    C. Base Reply: Formulate your reply based exclusively on the content of that identified text block and its associated sender.
+    D. Ignore All Else: Explicitly disregard all other text elements in the screenshot. This includes: smaller text blocks above or below the main one (like other posts or comments), navigation menus (like 'Home', 'Explore', 'Notifications'), sidebars ('Who to follow', 'Explore' topics), headers, footers, separated timestamps or usernames not directly linked to the main text block, interaction buttons ('Like', 'Reply'), and any text cut off by the border. Your focus is only the single largest conversational block and its direct sender.
+
+10. Output is the Reply: Your response should be the message User will send. Do not provide summaries, analyses, or explanations of the screenshot or your generated reply.
+
+11. Formatting: Do not use "—" symbols in the response.`}
       );
     }
     
@@ -397,20 +464,20 @@ document.addEventListener("DOMContentLoaded", () => {
       
       // Validate based on selected provider
       if (provider === 'openai' && !openaiApiKey) {
-        setStatus("API key not configured", true);
+        setStatus("OpenAI API key required", true);
         return;
       } else if (provider === 'gemini' && !geminiApiKey) {
-        setStatus("API key not configured", true);
+        setStatus("Gemini API key required", true);
         return;
       }
       
       // Validate API key format
       if (provider === 'openai' && openaiApiKey.length < 10) {
-        setStatus("API key not configured", true);
+        setStatus("Invalid OpenAI API key format", true);
         return;
       }
       if (provider === 'gemini' && geminiApiKey.length < 10) {
-        setStatus("API key not configured", true);
+        setStatus("Invalid Gemini API key format", true);
         return;
       }
       
@@ -443,7 +510,7 @@ document.addEventListener("DOMContentLoaded", () => {
               // Remove loading state
               saveBtn.disabled = false;
               saveBtn.classList.remove('loading');
-              saveBtn.textContent = 'Save Settings 🔑';
+              saveBtn.textContent = 'Save Settings';
               
               if (chrome.runtime.lastError) {
                 console.error("Error saving to sync storage:", chrome.runtime.lastError);

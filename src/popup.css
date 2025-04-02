@@ -166,6 +166,7 @@ body {
   background: linear-gradient(135deg, var(--primary), var(--primary-light));
   color: white;
   box-shadow: 0 4px 12px rgba(79, 70, 229, 0.2);
+  height: 40px;
 }
 
 #generate:hover {
@@ -184,6 +185,7 @@ body {
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  height: 40px;
 }
 
 #takeScreenshot:hover {
@@ -201,6 +203,7 @@ body {
   background: var(--secondary);
   color: white;
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+  height: 40px;
 }
 
 #insertReply.input-focused {
@@ -225,6 +228,7 @@ body {
   color: white;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  height: 40px;
 }
 
 #copy:hover {
@@ -245,6 +249,7 @@ body {
   font-size: 13px;
   font-weight: 500;
   margin-top: 2px;
+  height: 35px;
 }
 
 #optionsBtn:hover {

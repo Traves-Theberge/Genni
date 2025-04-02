@@ -69,6 +69,10 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                        
       return (isInput || isTextArea || isContentEditable) && isVisible;
     }
+
+    // Check if we're on X.com (Twitter)
+    const isTwitterOrX = window.location.hostname.includes('twitter.com') || 
+                         window.location.hostname.includes('x.com');
     
     // First try to use the element with active selection or focus
     let replyBox = selectionContainer || (isValidInputField(activeElement) ? activeElement : null);
@@ -78,13 +82,19 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     if (!replyBox) {
       // More comprehensive list of selectors for input fields
       const selectors = [
+        // X.com (Twitter) specific selectors - new interface
+        "[data-testid='tweetTextarea_0']",
+        "[data-testid='tweetTextInput_0']",
+        "[data-text='true']",
+        "div[role='textbox'][aria-multiline='true']",
+        "div[role='textbox'][data-testid='tweetTextarea_0']",
+        "div[contenteditable='true'][aria-multiline='true']",
         // Chat and messaging inputs
         ".msg-form__contenteditable",
         "[aria-label='Message Body']",
         "[aria-label='Message body']",
         "[aria-label='Message']",
         "[aria-label='Type a message']",
-        "[data-testid='tweetTextarea_0']", // Twitter/X
         "[placeholder='Send a message']",
         "[placeholder*='Type a message']",
         "[placeholder*='message']",
@@ -97,7 +107,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         "[role='textbox']",
         // Generic input types
         "[contenteditable='true']",
-        "[data-text='true']",
         // Fallbacks
         "textarea[name='message']",
         "textarea[placeholder*='message']",
@@ -131,6 +140,73 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
         }
         
         if (replyBox) break;
+      }
+    }
+
+    // Special handling for Twitter/X.com
+    if (isTwitterOrX && !replyBox) {
+      console.log("On X.com/Twitter - trying special methods");
+      
+      // Try to find all contenteditable divs
+      const allContentEditableDivs = document.querySelectorAll('div[contenteditable="true"]');
+      console.log(`Found ${allContentEditableDivs.length} contenteditable divs on X.com`);
+      
+      // Try to find divs with role=textbox
+      const allRoleTextboxDivs = document.querySelectorAll('div[role="textbox"]');
+      console.log(`Found ${allRoleTextboxDivs.length} role=textbox divs on X.com`);
+      
+      // Check visible elements
+      for (const element of [...allContentEditableDivs, ...allRoleTextboxDivs]) {
+        const style = window.getComputedStyle(element);
+        if (style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0' && 
+            element.offsetParent !== null) {
+          console.log("Found potential X.com input field:", element);
+          replyBox = element;
+          matchedSelector = "x-special";
+          break;
+        }
+      }
+      
+      // If still not found, look at what's around the placeholder
+      if (!replyBox) {
+        // Find placeholder elements that might indicate where the input is
+        const placeholders = document.querySelectorAll('[placeholder], [data-placeholder]');
+        for (const placeholder of placeholders) {
+          if (placeholder.textContent.includes('Post') || 
+              placeholder.getAttribute('placeholder')?.includes('Post') ||
+              placeholder.getAttribute('data-placeholder')?.includes('Post')) {
+            console.log("Found X.com placeholder element:", placeholder);
+            
+            // Check the element itself
+            if (placeholder.isContentEditable) {
+              replyBox = placeholder;
+              matchedSelector = "x-placeholder";
+              break;
+            }
+            
+            // Check parent
+            const parent = placeholder.parentElement;
+            if (parent && parent.isContentEditable) {
+              replyBox = parent;
+              matchedSelector = "x-placeholder-parent";
+              break;
+            }
+            
+            // Check siblings
+            const siblings = placeholder.parentElement?.children;
+            if (siblings) {
+              for (const sibling of siblings) {
+                if (sibling !== placeholder && 
+                    (sibling.isContentEditable || 
+                     sibling.getAttribute('role') === 'textbox')) {
+                  replyBox = sibling;
+                  matchedSelector = "x-placeholder-sibling";
+                  break;
+                }
+              }
+            }
+          }
+        }
       }
     }
 
@@ -229,6 +305,34 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
               }
             }
             
+            // Special handling for X.com
+            if (!inserted && isTwitterOrX) {
+              console.log("Using special X.com insertion method");
+              // Try setting innerHTML 
+              const currentHTML = replyBox.innerHTML;
+              if (!currentHTML || currentHTML === '<br>' || currentHTML === '<br/>') {
+                replyBox.innerHTML = request.reply;
+                inserted = true;
+                console.log("X.com innerHTML insertion successful");
+              } else {
+                // Try direct typing simulation
+                replyBox.focus();
+                document.execCommand('selectAll', false, null);
+                document.execCommand('insertText', false, request.reply);
+                inserted = true;
+                console.log("X.com simulated typing insertion");
+              }
+              
+              // Trigger input events to make sure X.com registers the change
+              replyBox.dispatchEvent(new Event('input', { bubbles: true }));
+              replyBox.dispatchEvent(new Event('change', { bubbles: true }));
+              
+              // Also fire more specific events that Twitter might be listening for
+              ['keydown', 'keyup', 'keypress'].forEach(eventType => {
+                replyBox.dispatchEvent(new KeyboardEvent(eventType, { bubbles: true }));
+              });
+            }
+            
             // Method 3: Selection-based insertion (last resort)
             if (!inserted) {
               const selection = window.getSelection();
@@ -267,6 +371,29 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       }
     } else {
       console.error("No compatible input field found on this page");
+      
+      // Log more details about the page to assist debugging
+      const isOnTwitter = window.location.hostname.includes('twitter.com') || window.location.hostname.includes('x.com');
+      console.log("Page info - URL:", window.location.href);
+      console.log("Is on X/Twitter:", isOnTwitter);
+      
+      // List potential input candidates that might have been missed
+      const potentialCandidates = [
+        'div[role="textbox"]', 
+        'div[contenteditable="true"]',
+        '[data-testid*="tweet"]',
+        '[aria-label*="post"]',
+        '[aria-label*="tweet"]',
+        '[aria-label*="reply"]'
+      ];
+      
+      for (const selector of potentialCandidates) {
+        const elements = document.querySelectorAll(selector);
+        if (elements.length > 0) {
+          console.log(`Found ${elements.length} potential input elements matching ${selector} that were not selected:`, elements);
+        }
+      }
+      
       const visibleInputs = document.querySelectorAll('input, textarea, [contenteditable="true"]');
       console.log(`Found ${visibleInputs.length} generic input elements on page`);
       sendResponse({ success: false, error: "No compatible input field found" });

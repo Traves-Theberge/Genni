@@ -1,154 +1,78 @@
-<div align="center">
+# Genni - AI Response Generator
 
-![Genni Logo](assets/Genni.png)
+Genni is a Chrome extension that uses AI to generate professional responses based on screenshots. It's perfect for quickly composing replies to emails, messages, or any text content visible on your screen.
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Chrome Web Store](https://img.shields.io/badge/Chrome-Extension-green)](https://chrome.google.com/webstore)
-[![Edge Add-on](https://img.shields.io/badge/Edge-Add--on-blue)](https://microsoftedge.microsoft.com/addons)
-[![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
-[![Made with ❤️](https://img.shields.io/badge/Made%20with-❤️-red)](https://github.com/yourusername/Genni)
+## Features
 
-**Genni is your AI-powered reply companion that generates intelligent, context-aware responses using screenshot analysis and OpenAI's Vision API.**
-
-</div>
-
-## ✨ Why Genni?
-
-- 🎯 **Smart & Contextual**: Understands conversation context through advanced screenshot analysis
-- ⚡ **Lightning Fast**: Generate professional replies in seconds
-- 🔒 **Privacy First**: Your data stays local, with secure API handling
-- 🎨 **Beautiful UI**: Modern glassmorphism design that's a joy to use
-- 🌐 **Cross-Platform**: Works seamlessly across major messaging platforms
-- ⌨️ **Keyboard Friendly**: Quick access with customizable shortcuts
+- **Screenshot-Based Responses**: Capture your screen and get AI-generated responses based on the content
+- **Multiple AI Providers**: Choose between OpenAI or Google Gemini
+- **Customizable**: Adjust temperature settings and system prompts to control response style
+- **Keyboard Shortcut**: Quickly activate Genni with Ctrl+Shift+Q
+- **Privacy-Focused**: Your API keys are stored locally in your browser
 
 ## Installation
 
-# Install Genni:
-- Clone or download the repository
-- Click "Load unpacked" in your browser
-- Select the src directory from the downloaded files
-- Enable Developer Mode in your browser:
+1. Download or clone this repository
+2. Open Chrome and navigate to `chrome://extensions/`
+3. Enable "Developer mode" in the top-right corner
+4. Click "Load unpacked" and select the Genni directory
+5. The extension is now installed and ready to use!
 
-- Edge: Go to edge://extensions
-- Chrome: Go to chrome://extensions
-- Toggle "Developer mode" switch in the top right
-- Configure the Extension:
+## Setup
 
-- Click the Genni icon in your browser toolbar
-- Open Settings and enter your OpenAI API key
-- Save your settings
-- Start generating smart replies!
+1. Click the Genni icon in your Chrome toolbar to open the popup
+2. Go to Settings (⚙️) to configure your API keys
+3. Choose your preferred AI provider:
+   - **OpenAI**: Requires an API key from [OpenAI Platform](https://platform.openai.com/)
+   - **Google Gemini**: Requires an API key from [Google AI Studio](https://aistudio.google.com/)
+4. Save your settings
 
-# Basic Usage
-- Navigate to any supported messaging platform
-- Press Ctrl+Shift+Z or click the Genni icon
-- Click "Capture Screenshot" to capture the conversation
-- Click "Generate Reply" to create an AI-powered response
-- Click "Insert Reply" to automatically insert the response
+## Usage
 
+### Method 1: Keyboard Shortcut
+1. Press `Ctrl+Shift+Q` to capture the current page and open the Genni menu
+2. Wait for the AI to analyze the screenshot and generate a response
+3. Copy the generated text or make edits as needed
 
-## 🎯 Key Features
+### Method 2: Extension Button
+1. Click the Genni icon in your Chrome toolbar
+2. The extension will capture the current page and generate a response
+3. Copy or customize the response to your needs
 
-<table>
-<tr>
-<td width="50%">
+## Customization
 
-### 🔍 Smart Analysis
-- Real-time screenshot processing
-- Context-aware response generation
-- Multi-platform compatibility
-- Intelligent conversation parsing
+### System Prompt
+The system prompt guides the AI's response style. You can modify it in the Settings page to better suit your communication needs.
 
-</td>
-<td width="50%">
+### Temperature
+Adjust the temperature slider to control how creative the AI responses should be:
+- Lower values (0.1-0.3): More consistent, conservative responses
+- Medium values (0.4-0.7): Balanced creativity and consistency
+- Higher values (0.8-1.0): More varied, creative responses
 
-### 🎨 Modern Interface
-- Sleek glassmorphism design
-- Intuitive controls
-- Visual feedback
-- Dark/Light mode support
+## Troubleshooting
 
-</td>
-</tr>
-<tr>
-<td width="50%">
+### Keyboard Shortcut Not Working
+- Make sure no other extensions are using the same keyboard shortcut
+- Try restarting Chrome
+- Verify the extension is enabled
+- Check Chrome's keyboard shortcut settings at `chrome://extensions/shortcuts`
 
-### ⚙️ Customization
-- Adjustable AI parameters
-- Custom response templates
-- Platform-specific settings
-- Keyboard shortcut mapping
+### API Key Issues
+- Confirm your API key is correctly entered without extra spaces
+- Verify your API key is active and has sufficient credits
+- Use the "Test API Key" button to check key validity
 
-</td>
-<td width="50%">
+## Privacy & Data
 
-### 🔒 Security
-- Secure API key storage
-- Local screenshot processing
-- HTTPS-only communication
-- No permanent data storage
+Genni processes screenshots using the AI provider you choose. Screenshots are temporarily stored in your browser's local storage and are not sent to any server other than the AI provider's API endpoint.
 
-</td>
-</tr>
-</table>
+Your API keys are stored in Chrome's secure storage and are only used to authenticate with your chosen AI provider.
 
-## 💻 Supported Platforms
+## Support & Feedback
 
-| Platform | Status | Features |
-|----------|---------|-----------|
-| LinkedIn | ✅ Full | Smart replies, Format preservation |
-| Gmail | ✅ Full | Rich text, Template support |
-| Outlook | ✅ Full | Signature integration, Threading |
-| Facebook | 🟡 Basic | Message replies |
-| X/Twitter | 🟡 Basic | Tweet responses |
-
-## 🛠️ Technical Architecture
-
-```mermaid
-graph TD
-    A[Browser Extension] --> B[Background Service]
-    B --> C[Screenshot Capture]
-    C --> D[Vision API]
-    D --> E[Response Generation]
-    E --> F[UI Injection]
-```
-
-## 🔧 Advanced Configuration
-
-```javascript
-{
-  "model": "gpt-4o-mini",
-  "maxTokens": 500,
-  "temperature": 0.7,
-  "responseFormat": "json"
-}
-```
-
-## 🤝 Contributing
-
-We love your input!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-## 📈 Roadmap
-
-- [ ] 🌍 Multi-language support
-- [ ] 📝 Custom reply templates
-- [ ] 🤖 Advanced AI models integration
-
-
-## 📄 License
-
-Distributed under the MIT License. See `LICENSE` for more information.
+For support, feature requests, or bug reports, please [open an issue](https://github.com/Traves-Theberge/genni/issues) or contact the developer.
 
 ---
 
-<div align="center">
-
 Made with ❤️ by Traves Theberge
-
-</div>
