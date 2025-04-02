@@ -11,6 +11,7 @@
     <div class="container">
         <div id="screenshot-container">
             <img id="screenshotPreview" alt="Screenshot Preview" aria-label="Preview of the captured screenshot" />
+            <div id="focus-indicator" class="hidden">Input field detected 🎯</div>
         </div>
         
         <textarea id="aiReply" placeholder="Generated reply will appear here." aria-label="Generated AI reply content"></textarea>
@@ -23,11 +24,11 @@
             <button id="optionsBtn" aria-label="Open options page">Settings ⚙️</button>
         </div>
         
-        <p id="shortcutInfo" class="shortcut-info">Hotkey: Press Ctrl+Shift+Z to open Genni</p>
+        <p id="shortcutInfo" class="shortcut-info">Hotkey: Press <kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Q</kbd> to open Genni</p>
     </div>
     
     <div id="toast" role="alert"></div>
     
-    <script src="popup.js"></script>
+    <script src="popup.js" type="module"></script>
 </body>
 </html>

@@ -9,110 +9,226 @@
 </head>
 <body>
   <div class="container">
-    <h2>Settings – Genni - AI Reply Generator</h2>
-    
-    <!-- Settings Form -->
-    <div class="input-group">
-      <label for="apiKey">OpenAI API Key</label>
-      <div class="api-key-container">
-        <input type="password" id="apiKey" placeholder="Your OpenAI API Key">
-        <button id="showKey" class="icon-btn" title="Show/Hide API Key">👁️</button>
-        <button id="testKey" class="icon-btn" title="Test API Key">🔍</button>
-      </div>
-      <div class="api-help">
-        <small>Get your API key from <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer">OpenAI API Keys</a></small>
-      </div>
-    </div>
-    
-    <div class="input-group">
-      <label for="model">AI Model</label>
-      <select id="model">
-        <option value="gpt-4o-mini">GPT-4o-mini (Cheap and Fast)</option>
-        <option value="gpt-4o">GPT-4o (Concise)</option>
-      </select>
-    </div>
-    
-    <div class="input-group">
-      <label for="systemPrompt">System Prompt</label>
-      <textarea id="systemPrompt" placeholder="Instructions for the AI"></textarea>
-    </div>
-    
-    <button id="save">Save Settings 🔑</button>
-    <p id="status"></p>
-    
-    <!-- Collapsible sections -->
-    <div class="tutorial-container">
-      <div class="tutorial-header">
-        <h3>Getting Started</h3>
-        <button id="toggleTutorial" class="toggle-btn">Show Tutorial</button>
-      </div>
+    <header>
+      <h1>Genni - AI Reply Generator</h1>
+      <p class="subtitle">Configure your AI assistant for optimal responses</p>
+    </header>
+
+    <main>
+      <section class="card" id="provider-selector-card">
+        <div class="card-header">
+          <h2>Choose AI Provider</h2>
+          <span class="badge-required">Required</span>
+        </div>
+        <div class="card-body">
+          <div class="provider-options">
+            <div class="provider-option">
+              <input type="radio" id="openai-provider" name="provider" value="openai" checked>
+              <label for="openai-provider">
+                <span class="provider-logo openai-logo"></span>
+                <div>
+                  <span class="provider-name">OpenAI</span>
+                  <span class="provider-description">High quality responses with GPT models</span>
+                </div>
+              </label>
+            </div>
+            <div class="provider-option">
+              <input type="radio" id="gemini-provider" name="provider" value="gemini">
+              <label for="gemini-provider">
+                <span class="provider-logo gemini-logo"></span>
+                <div>
+                  <span class="provider-name">Google Gemini</span>
+                  <span class="provider-description">Fast responses with free tier access</span>
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+      </section>
       
-      <div id="tutorial" class="tutorial-content hidden">
-        <div class="step">
-          <div class="step-number">1</div>
-          <div class="step-content">
-            <h4>Set your OpenAI API Key</h4>
-            <p>Enter your API key from the OpenAI dashboard. Required for Genni to work.</p>
+      <!-- OpenAI Settings -->
+      <section class="card" id="openai-settings">
+        <div class="card-header">
+          <h2>OpenAI API Configuration</h2>
+          <span class="badge-required">Required for OpenAI</span>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="apiKey">OpenAI API Key</label>
+            <div class="api-key-container">
+              <input type="password" id="apiKey" placeholder="sk-...">
+              <button id="showKey" class="icon-btn" title="Show/Hide API Key">👁️</button>
+              <button id="testKey" class="icon-btn" title="Test API Key">🔍</button>
+            </div>
+            <div class="api-help">
+              <a href="https://platform.openai.com/api-keys" target="_blank" rel="noopener noreferrer">
+                Get your API key from OpenAI
+                <svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12">
+                  <path fill="currentColor" d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
+                </svg>
+              </a>
+            </div>
+          </div>
+          
+          <div class="form-group">
+            <label for="model">AI Model</label>
+            <select id="model">
+              <option value="gpt-4o-mini">GPT-4o-mini (Faster & More Affordable)</option>
+              <option value="gpt-4o">GPT-4o (Higher Quality)</option>
+            </select>
+            <small class="hint">Choose based on your needs for speed vs quality</small>
           </div>
         </div>
-        
-        <div class="step">
-          <div class="step-number">2</div>
-          <div class="step-content">
-            <h4>Choose your AI Model</h4>
-            <p>GPT-4o-mini is cheaper/faster, while GPT-4o provides better quality responses.</p>
-          </div>
-        </div>
-        
-        <div class="step">
-          <div class="step-number">3</div>
-          <div class="step-content">
-            <h4>Customize Prompt (Optional)</h4>
-            <p>Modify the instructions given to the AI. Default is optimized for professional replies.</p>
-          </div>
-        </div>
-        
-        <div class="step">
-          <div class="step-number">4</div>
-          <div class="step-content">
-            <h4>Using Genni</h4>
-            <p>Click the extension icon or use Ctrl+Shift+Z. Take a screenshot, generate and insert replies.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="tos-container">
-      <div class="tos-header">
-        <h3>Terms of Service</h3>
-        <button id="toggleTos" class="toggle-btn">Show Terms</button>
-      </div>
+      </section>
       
-      <div id="tos" class="tos-content hidden">
-        <p><strong>By using Genni, you agree to the following:</strong></p>
-        
-        <h4>API Key Usage</h4>
-        <p>Your OpenAI API key is stored locally and only sent to OpenAI's official endpoints.</p>
-        
-        <h4>Data Privacy</h4>
-        <p>Screenshots are sent to OpenAI. Do not capture sensitive or confidential information.</p>
-        
-        <h4>Usage Responsibility</h4>
-        <p>You're responsible for content generated. The extension creator is not liable for misuse.</p>
-        
-        <h4>OpenAI Terms</h4>
-        <p>Your use is subject to <a href="https://openai.com/policies/terms-of-use" target="_blank" rel="noopener noreferrer">OpenAI's Terms of Use</a>.</p>
-        
-        <h4>Billing</h4>
-        <p>You're responsible for charges to your OpenAI account when using your API key.</p>
+      <!-- Gemini Settings -->
+      <section class="card" id="gemini-settings" style="display:none;">
+        <div class="card-header">
+          <h2>Google Gemini Configuration</h2>
+          <span class="badge-required">Required for Gemini</span>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="geminiKey">Gemini API Key</label>
+            <div class="api-key-container">
+              <input type="password" id="geminiKey" placeholder="Your Google Gemini API Key">
+              <button id="showGeminiKey" class="icon-btn" title="Show/Hide API Key">👁️</button>
+              <button id="testGeminiKey" class="icon-btn" title="Test API Key">🔍</button>
+            </div>
+            <div class="api-help">
+              <a href="https://ai.google.dev/" target="_blank" rel="noopener noreferrer">
+                Get your API key from Google AI Studio
+                <svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="12" height="12">
+                  <path fill="currentColor" d="M14,3V5H17.59L7.76,14.83L9.17,16.24L19,6.41V10H21V3M19,19H5V5H12V3H5C3.89,3 3,3.9 3,5V19A2,2 0 0,0 5,21H19A2,2 0 0,0 21,19V12H19V19Z" />
+                </svg>
+              </a>
+            </div>
+          </div>
+          <div class="info-alert">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24">
+              <path fill="currentColor" d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+            </svg>
+            Using Gemini 2.0 Flash model for vision capabilities
+          </div>
+        </div>
+      </section>
+      
+      <!-- Response Customization -->
+      <section class="card">
+        <div class="card-header">
+          <h2>Response Customization</h2>
+          <span class="badge-optional">Optional</span>
+        </div>
+        <div class="card-body">
+          <div class="form-group">
+            <label for="systemPrompt">System Prompt</label>
+            <textarea id="systemPrompt" placeholder="Instructions for the AI"></textarea>
+            <small class="hint">Customize how the AI responds to your messages</small>
+          </div>
+
+          <div class="form-group">
+            <label for="temperature">Temperature (Creativity)</label>
+            <div class="slider-container">
+              <input type="range" id="temperature" min="0" max="10" step="1" value="7">
+              <div class="slider-labels">
+                <span>Precise</span>
+                <span class="temperature-value">0.7</span>
+                <span>Creative</span>
+              </div>
+            </div>
+            <small class="hint">Lower values produce more predictable responses, higher values more creative ones</small>
+          </div>
+        </div>
+      </section>
+
+      <div class="action-container">
+        <button id="save" class="btn btn-primary">Save Settings</button>
+        <p id="status"></p>
       </div>
-    </div>
+    </main>
     
-    <div class="footer">
-      <p class="privacy-notice">Note: Screenshots are sent to OpenAI for processing. Make sure no sensitive information is visible.</p>
-    </div>
+    <!-- Help & Information -->
+    <aside>
+      <section class="card tutorial-container">
+        <div class="card-header tutorial-header">
+          <h2>Getting Started</h2>
+          <button id="toggleTutorial" class="toggle-btn">Show Tutorial</button>
+        </div>
+        
+        <div id="tutorial" class="tutorial-content hidden">
+          <div class="step-list">
+            <div class="step">
+              <div class="step-number">1</div>
+              <div class="step-content">
+                <h3>Choose your AI Provider</h3>
+                <p>Select between OpenAI or Google Gemini for generating replies.</p>
+              </div>
+            </div>
+            
+            <div class="step">
+              <div class="step-number">2</div>
+              <div class="step-content">
+                <h3>Enter your API Key</h3>
+                <p>Add your API key from the selected provider to enable response generation.</p>
+              </div>
+            </div>
+            
+            <div class="step">
+              <div class="step-number">3</div>
+              <div class="step-content">
+                <h3>Customize Settings (Optional)</h3>
+                <p>Adjust the system prompt and temperature to control the AI's responses.</p>
+              </div>
+            </div>
+            
+            <div class="step">
+              <div class="step-number">4</div>
+              <div class="step-content">
+                <h3>Using Genni</h3>
+                <p>Click the extension icon or use Ctrl+Shift+Q to capture a screenshot, generate and insert replies.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <section class="card tos-container">
+        <div class="card-header tos-header">
+          <h2>Terms of Service</h2>
+          <button id="toggleTos" class="toggle-btn">Show Terms</button>
+        </div>
+        
+        <div id="tos" class="tos-content hidden">
+          <p><strong>By using Genni, you agree to the following:</strong></p>
+          
+          <h3>API Key Usage</h3>
+          <p>Your API key is stored locally and only sent to the selected AI provider's official endpoints.</p>
+          
+          <h3>Data Privacy</h3>
+          <p>Screenshots are sent to the selected AI provider. Do not capture sensitive or confidential information.</p>
+          
+          <h3>Usage Responsibility</h3>
+          <p>You're responsible for content generated. The extension creator is not liable for misuse.</p>
+          
+          <h3>Provider Terms</h3>
+          <p>Your use is subject to the terms of the selected AI provider.</p>
+          
+          <h3>Billing</h3>
+          <p>You're responsible for charges to your account when using your API key.</p>
+        </div>
+      </section>
+    </aside>
+    
+    <footer>
+      <div class="privacy-notice">
+        <span>Note: Screenshots are sent to your selected AI provider for processing. Make sure no sensitive information is visible.</span>
+      </div>
+      <div class="shortcut-info">
+        <span><kbd>Ctrl</kbd>+<kbd>Shift</kbd>+<kbd>Q</kbd> to open Genni</span>
+      </div>
+    </footer>
   </div>
   
-  <script src="options.js"></script>
+  <script src="options.js" type="module"></script>
 </body>
 </html>

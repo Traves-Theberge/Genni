@@ -8,12 +8,10 @@
     "48": "assets/icon_48.png",
     "128": "assets/icon_128.png"
   },
-  "permissions": ["activeTab", "tabs", "storage", "scripting", "clipboardWrite"],
+  "permissions": ["activeTab", "storage", "scripting", "clipboardWrite"],
   "host_permissions": ["<all_urls>"],
   "background": {
-    "service_worker": "background.js",
-    "type": "module",
-    "persistence": true
+    "service_worker": "background.js"
   },
   "content_scripts": [
     {
@@ -24,15 +22,13 @@
   ],
   "action": {
     "default_popup": "popup.html",
-    "default_title": "Genni - AI Reply Generator",
-    "default_width": 360,
-    "default_height": 560
+    "default_title": "Genni - AI Reply Generator"
   },
   "options_page": "options.html",
   "commands": {
     "_execute_action": {
       "suggested_key": {
-        "default": "Ctrl+Shift+Z"
+        "default": "Ctrl+Shift+Q"
       },
       "description": "Activate AI Reply Generation"
     }

@@ -31,6 +31,18 @@
   100% { background-position: 200% 0; }
 }
 
+@keyframes pulse {
+  0% {
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+  }
+  50% {
+    box-shadow: 0 4px 20px rgba(16, 185, 129, 0.4);
+  }
+  100% {
+    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
+  }
+}
+
 /* Dark mode is now the default */
 body {
   font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
@@ -191,6 +203,12 @@ body {
   box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);
 }
 
+#insertReply.input-focused {
+  background: linear-gradient(135deg, var(--secondary), #06d6a0);
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.25);
+  animation: pulse 2s infinite;
+}
+
 #insertReply:hover {
   transform: translateY(-2px);
   box-shadow: 0 6px 14px rgba(16, 185, 129, 0.25);
@@ -293,6 +311,31 @@ button.loading::after {
   width: 100%;
 }
 
+/* API Key Warning */
+.api-key-warning {
+  background: rgba(249, 115, 22, 0.15);
+  color: var(--accent);
+  padding: 10px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: fadeIn 0.5s ease;
+  border-left: 3px solid var(--accent);
+}
+
+.api-key-warning a {
+  color: inherit;
+  font-weight: 600;
+  text-decoration: underline;
+}
+
+.api-key-warning a:hover {
+  opacity: 0.9;
+}
+
 /* Light mode override */
 @media (prefers-color-scheme: light) {
   body {
@@ -344,5 +387,11 @@ button.loading::after {
   #toast {
     background: var(--dark);
     color: white;
+  }
+  
+  .api-key-warning {
+    background: rgba(249, 115, 22, 0.1);
+    color: #c2410c;
+    border-left: 3px solid #c2410c;
   }
 }

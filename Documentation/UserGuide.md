@@ -15,14 +15,14 @@
 
 3. Configure the Extension:
    - Click the Genni icon in your browser toolbar
-   - Open Settings and enter your OpenAI API key
+   - Open Settings and enter your API key (OpenAI or Google Gemini)
    - Save your settings
 
 4. Start generating smart replies!
 
 ### Basic Usage
 1. Navigate to any supported messaging platform
-2. Press `Ctrl+Shift+Z` or click the Genni icon
+2. Press `Ctrl+Shift+Q` or click the Genni icon
 3. Click "Capture Screenshot" to capture the conversation
 4. Click "Generate Reply" to create an AI-powered response
 5. Click "Insert Reply" to automatically insert the response
@@ -50,9 +50,12 @@
 
 ### API Configuration
 1. Open Genni Settings
-2. Enter your OpenAI API key
-3. Select preferred AI model
-4. Customize system prompt if desired
+2. Choose your AI provider:
+   - OpenAI (GPT models)
+   - Google Gemini
+3. Enter your API key for the selected provider
+4. For OpenAI, select preferred AI model
+5. Customize system prompt if desired
 
 ### Response Preferences
 - **Temperature**: Adjust creativity (0.0 - 1.0)
@@ -61,7 +64,7 @@
 - **Language**: Multi-language support
 
 ### Keyboard Shortcuts
-Default: `Ctrl+Shift+Z`
+Default: `Ctrl+Shift+Q`
 Customizable through:
 1. Visit `edge://extensions/shortcuts` or `chrome://extensions/shortcuts`
 2. Find "Genni - AI Reply Generator"
@@ -97,6 +100,18 @@ Customizable through:
   - Replies
   - Direct Messages
 
+## AI Provider Comparison
+
+### OpenAI (GPT)
+- **Best for**: Detailed, nuanced responses
+- **Models**: GPT-4o-mini (faster/cheaper) or GPT-4o (higher quality)
+- **Cost**: Requires OpenAI API key with credits
+
+### Google Gemini
+- **Best for**: Quick responses, good image understanding
+- **Models**: Gemini 2.0 Flash
+- **Cost**: Free tier available with API key registration
+
 ## Troubleshooting
 
 ### Common Issues
@@ -109,7 +124,7 @@ Customizable through:
 2. **Reply Not Generating**
    - Verify API key
    - Check internet connection
-   - Try a different model
+   - Try a different AI provider
 
 3. **Insert Not Working**
    - Use copy-paste instead

@@ -29,65 +29,156 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       }
     }
     
-    // More comprehensive list of selectors for input fields
-    const selectors = [
-      // Chat and messaging inputs
-      ".msg-form__contenteditable",
-      "[aria-label='Message Body']",
-      "[aria-label='Message body']",
-      "[aria-label='Message']",
-      "[aria-label='Type a message']",
-      "[data-testid='tweetTextarea_0']", // Twitter/X
-      "[placeholder='Send a message']",
-      "[placeholder*='Type a message']",
-      "[placeholder*='message']",
-      "[placeholder*='Message']",
-      // Generic input types
-      "[role='textbox']",
-      "[contenteditable='true']",
-      "[data-text='true']",
-      ".public-DraftEditor-content", // React Draft.js editor
-      // Fallbacks
-      "textarea[name='message']",
-      "textarea[placeholder*='message']",
-      "textarea[placeholder*='Message']",
-      "textarea",
-      "input[type='text']"
-    ];
-
-    // Try to find an appropriate input field
-    let replyBox = null;
-    let matchedSelector = "";
+    // Track the active element when the user invokes the extension
+    let activeElement = document.activeElement;
+    console.log("Current active element when inserting:", activeElement ? activeElement.tagName : "None");
     
-    for (const selector of selectors) {
-      const elements = document.querySelectorAll(selector);
-      console.log(`Found ${elements.length} elements matching selector: ${selector}`);
+    // Check if there's a text selection within a contenteditable area
+    const selection = window.getSelection();
+    let selectionContainer = null;
+    
+    if (selection && !selection.isCollapsed && selection.rangeCount > 0) {
+      const range = selection.getRangeAt(0);
+      const container = range.commonAncestorContainer;
       
-      for (const element of elements) {
-        // Check if the element is visible
-        if (element.offsetParent !== null && 
-            element.disabled !== true && 
-            !element.readOnly && 
-            !element.hasAttribute("readonly") &&
-            (element.nodeName !== "TEXTAREA" || !element.hasAttribute("disabled"))) {
-          
-          // Check for element visibility more thoroughly
-          const style = window.getComputedStyle(element);
-          if (style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0') {
-            replyBox = element;
-            matchedSelector = selector;
-            console.log("Found usable input element:", element.tagName, selector);
-            break;
-          }
-        }
+      // Check if the container or its parent is a valid input field
+      if (isValidInputField(container)) {
+        selectionContainer = container;
+      } else if (container.parentElement && isValidInputField(container.parentElement)) {
+        selectionContainer = container.parentElement;
       }
       
-      if (replyBox) break;
+      if (selectionContainer) {
+        console.log("Found selection container:", selectionContainer.tagName);
+      }
+    }
+    
+    // Function to check if an element is a valid input field
+    function isValidInputField(element) {
+      if (!element || !element.tagName) return false;
+      
+      const tagName = element.tagName.toLowerCase();
+      const isInput = tagName === 'input' && (element.type === 'text' || element.type === 'search');
+      const isTextArea = tagName === 'textarea';
+      const isContentEditable = element.isContentEditable || 
+                               (element.getAttribute && element.getAttribute('contenteditable') === 'true');
+      const isVisible = element.offsetParent !== null && 
+                       !element.disabled && 
+                       !element.readOnly && 
+                       !element.hasAttribute("readonly");
+                       
+      return (isInput || isTextArea || isContentEditable) && isVisible;
+    }
+    
+    // First try to use the element with active selection or focus
+    let replyBox = selectionContainer || (isValidInputField(activeElement) ? activeElement : null);
+    let matchedSelector = replyBox ? "direct-focus" : "";
+    
+    // If no suitable element found through selection/focus, try selectors as fallback
+    if (!replyBox) {
+      // More comprehensive list of selectors for input fields
+      const selectors = [
+        // Chat and messaging inputs
+        ".msg-form__contenteditable",
+        "[aria-label='Message Body']",
+        "[aria-label='Message body']",
+        "[aria-label='Message']",
+        "[aria-label='Type a message']",
+        "[data-testid='tweetTextarea_0']", // Twitter/X
+        "[placeholder='Send a message']",
+        "[placeholder*='Type a message']",
+        "[placeholder*='message']",
+        "[placeholder*='Message']",
+        // Rich text editors
+        ".public-DraftEditor-content", // React Draft.js editor
+        ".ql-editor", // Quill editor
+        ".ProseMirror", // ProseMirror editor
+        ".tox-edit-area__iframe", // TinyMCE
+        "[role='textbox']",
+        // Generic input types
+        "[contenteditable='true']",
+        "[data-text='true']",
+        // Fallbacks
+        "textarea[name='message']",
+        "textarea[placeholder*='message']",
+        "textarea[placeholder*='Message']",
+        "textarea:not([disabled]):not([readonly])",
+        "input[type='text']:not([disabled]):not([readonly])"
+      ];
+
+      // Try to find an appropriate input field
+      for (const selector of selectors) {
+        const elements = document.querySelectorAll(selector);
+        console.log(`Found ${elements.length} elements matching selector: ${selector}`);
+        
+        for (const element of elements) {
+          // Check if the element is visible
+          if (element.offsetParent !== null && 
+              element.disabled !== true && 
+              !element.readOnly && 
+              !element.hasAttribute("readonly") &&
+              (element.nodeName !== "TEXTAREA" || !element.hasAttribute("disabled"))) {
+            
+            // Check for element visibility more thoroughly
+            const style = window.getComputedStyle(element);
+            if (style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0') {
+              replyBox = element;
+              matchedSelector = selector;
+              console.log("Found usable input element:", element.tagName, selector);
+              break;
+            }
+          }
+        }
+        
+        if (replyBox) break;
+      }
+    }
+
+    // Handle iframes - websites like Gmail use iframes for composition
+    if (!replyBox) {
+      const iframes = document.querySelectorAll('iframe');
+      console.log(`Found ${iframes.length} iframes, attempting to access their content...`);
+      
+      for (const iframe of iframes) {
+        try {
+          // Only proceed if we can access the iframe content (same-origin policy)
+          const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+          
+          // Try to find focused element in iframe
+          const iframeFocused = iframeDoc.activeElement;
+          if (isValidInputField(iframeFocused)) {
+            replyBox = iframeFocused;
+            matchedSelector = "iframe-focused-element";
+            console.log("Found focused input element in iframe:", iframeFocused.tagName);
+            break;
+          }
+          
+          // Try standard input selectors within iframe
+          for (const tag of ['textarea', 'div[contenteditable="true"]', 'body[contenteditable="true"]']) {
+            const elements = iframeDoc.querySelectorAll(tag);
+            if (elements.length > 0) {
+              for (const element of elements) {
+                if (element.offsetParent !== null && !element.disabled && !element.readOnly) {
+                  replyBox = element;
+                  matchedSelector = `iframe-${tag}`;
+                  console.log("Found input element in iframe:", element.tagName);
+                  break;
+                }
+              }
+            }
+            if (replyBox) break;
+          }
+        } catch (e) {
+          console.log("Cannot access iframe content due to same-origin policy:", e);
+        }
+        
+        if (replyBox) break;
+      }
     }
 
     if (replyBox) {
       try {
-        console.log(`Using element matched by selector: ${matchedSelector}`);
+        console.log(`Using element matched by: ${matchedSelector}`);
         replyBox.focus();
         
         if (replyBox.tagName === "TEXTAREA" || replyBox.tagName === "INPUT") {
@@ -176,12 +267,47 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
       }
     } else {
       console.error("No compatible input field found on this page");
-      const visibleInputs = document.querySelectorAll('input, textarea');
+      const visibleInputs = document.querySelectorAll('input, textarea, [contenteditable="true"]');
       console.log(`Found ${visibleInputs.length} generic input elements on page`);
       sendResponse({ success: false, error: "No compatible input field found" });
     }
     return true;
+  } else if (request.action === "trackFocus") {
+    // This message allows popup to ask which element has focus before opening
+    const activeElement = document.activeElement;
+    const tagName = activeElement ? activeElement.tagName : "none";
+    const isInput = activeElement && (
+      activeElement.tagName === "INPUT" || 
+      activeElement.tagName === "TEXTAREA" || 
+      activeElement.isContentEditable
+    );
+    
+    console.log("Current focus:", tagName, isInput);
+    sendResponse({ 
+      hasFocus: !!activeElement,
+      element: tagName,
+      isInput: isInput
+    });
+    return true;
   }
   return true;
 });
+
+// Store the last focused element
+let lastFocusedInput = null;
+
+// Track focus events on potential input fields
+document.addEventListener('focusin', (event) => {
+  const target = event.target;
   
+  // Check if this is a potential input field
+  if (target.tagName === 'INPUT' || 
+      target.tagName === 'TEXTAREA' || 
+      target.isContentEditable || 
+      target.getAttribute('contenteditable') === 'true' ||
+      target.role === 'textbox') {
+    
+    lastFocusedInput = target;
+    console.log("Focus detected on input element:", target.tagName);
+  }
+}, true);
