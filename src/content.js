@@ -145,36 +145,124 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
 
     // Special handling for Twitter/X.com
     if (isTwitterOrX && !replyBox) {
-      console.log("On X.com/Twitter - trying special methods");
+      console.log("On X.com/Twitter - trying specialized X handling");
       
-      // Try to find all contenteditable divs
-      const allContentEditableDivs = document.querySelectorAll('div[contenteditable="true"]');
-      console.log(`Found ${allContentEditableDivs.length} contenteditable divs on X.com`);
+      // IMPROVED: More specific targeting for X.com's latest interface
+      const xInputSelectors = [
+        // Primary compose box selector (most reliable)
+        "div[data-testid='tweetTextarea_0'][role='textbox']",
+        // Reply box selector
+        "div[data-testid='tweetTextarea_0'][aria-label*='Reply']",
+        // Quote tweet
+        "div[data-testid='tweetTextarea_0'][aria-label*='Quote']",
+        // Generic textbox with specific X attributes
+        "div[role='textbox'][data-contents='true']",
+        // Contenteditable divs with data attributes specific to X
+        "div[contenteditable='true'][data-block='true']",
+        // The most specific placeholder for tweet composition
+        "div[data-placeholder='What is happening?!']",
+        // The most specific placeholder for replies
+        "div[data-placeholder*='Reply']",
+      ];
       
-      // Try to find divs with role=textbox
-      const allRoleTextboxDivs = document.querySelectorAll('div[role="textbox"]');
-      console.log(`Found ${allRoleTextboxDivs.length} role=textbox divs on X.com`);
+      // First try the more specific X selectors
+      for (const selector of xInputSelectors) {
+        const elements = document.querySelectorAll(selector);
+        console.log(`Found ${elements.length} X-specific elements matching selector: ${selector}`);
+        
+        if (elements.length > 0) {
+          // Use the most visible element if there are multiple matches
+          for (const element of elements) {
+            const style = window.getComputedStyle(element);
+            const rect = element.getBoundingClientRect();
+            
+            // Check if element is visible and in the viewport
+            if (style.display !== 'none' && 
+                style.visibility !== 'hidden' && 
+                style.opacity !== '0' && 
+                element.offsetParent !== null &&
+                rect.height > 20 && // Must have reasonable height
+                rect.bottom > 0 && 
+                rect.top < window.innerHeight) {
+                
+              console.log("Found X input element with selector:", selector);
+              replyBox = element;
+              matchedSelector = "x-specific-" + selector;
+              break;
+            }
+          }
+        }
+        
+        if (replyBox) break;
+      }
       
-      // Check visible elements
-      for (const element of [...allContentEditableDivs, ...allRoleTextboxDivs]) {
-        const style = window.getComputedStyle(element);
-        if (style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0' && 
-            element.offsetParent !== null) {
-          console.log("Found potential X.com input field:", element);
-          replyBox = element;
-          matchedSelector = "x-special";
-          break;
+      // Fallback to standard approach if specific selectors failed
+      if (!replyBox) {
+        // Try to find all contenteditable divs
+        const allContentEditableDivs = document.querySelectorAll('div[contenteditable="true"]');
+        console.log(`Found ${allContentEditableDivs.length} contenteditable divs on X.com`);
+        
+        // Try to find divs with role=textbox
+        const allRoleTextboxDivs = document.querySelectorAll('div[role="textbox"]');
+        console.log(`Found ${allRoleTextboxDivs.length} role=textbox divs on X.com`);
+        
+        // Check visible elements - prioritize elements in the more central/bottom area of the screen
+        // which is where X usually has its compose boxes
+        const candidates = [...allContentEditableDivs, ...allRoleTextboxDivs];
+        const scoredCandidates = candidates.map(element => {
+          const rect = element.getBoundingClientRect();
+          const style = window.getComputedStyle(element);
+          
+          // Skip invisible elements
+          if (style.display === 'none' || 
+              style.visibility === 'hidden' || 
+              style.opacity === '0' ||
+              element.offsetParent === null) {
+            return { element, score: -1 };
+          }
+          
+          // Calculate position score - prefer elements in lower half of screen
+          const verticalPositionScore = rect.top / window.innerHeight; // 0 = top, ~1 = bottom
+          const positionScore = verticalPositionScore * 5; // Weight position more
+          
+          // Size score - prefer larger elements which are likely compose boxes
+          const sizeScore = (rect.width * rect.height) / 10000;
+          
+          // Prefer empty or nearly empty elements (likely unused compose boxes)
+          const contentScore = (element.textContent?.trim().length || 0) < 10 ? 3 : 0;
+          
+          // Extra points for elements with specific X-related attributes
+          const attributeScore = element.getAttribute('data-testid')?.includes('tweet') ? 5 : 0;
+          
+          const totalScore = positionScore + sizeScore + contentScore + attributeScore;
+          return { element, score: totalScore };
+        });
+        
+        // Sort by score descending and take the best candidate
+        scoredCandidates.sort((a, b) => b.score - a.score);
+        const bestCandidate = scoredCandidates.find(c => c.score > 0);
+        
+        if (bestCandidate) {
+          replyBox = bestCandidate.element;
+          matchedSelector = "x-scored-candidate";
+          console.log("Selected X.com input by score:", bestCandidate.score);
         }
       }
       
-      // If still not found, look at what's around the placeholder
+      // Last resort: try finding parent elements of placeholders
       if (!replyBox) {
         // Find placeholder elements that might indicate where the input is
         const placeholders = document.querySelectorAll('[placeholder], [data-placeholder]');
         for (const placeholder of placeholders) {
-          if (placeholder.textContent.includes('Post') || 
-              placeholder.getAttribute('placeholder')?.includes('Post') ||
-              placeholder.getAttribute('data-placeholder')?.includes('Post')) {
+          if (placeholder.getAttribute('placeholder')?.includes('Post') ||
+              placeholder.getAttribute('placeholder')?.includes('Tweet') ||
+              placeholder.getAttribute('placeholder')?.includes('Reply') ||
+              placeholder.getAttribute('data-placeholder')?.includes('Post') ||
+              placeholder.getAttribute('data-placeholder')?.includes('Tweet') ||
+              placeholder.getAttribute('data-placeholder')?.includes('Reply') ||
+              placeholder.getAttribute('aria-label')?.includes('Post') ||
+              placeholder.getAttribute('aria-label')?.includes('Tweet') ||
+              placeholder.getAttribute('aria-label')?.includes('Reply')) {
             console.log("Found X.com placeholder element:", placeholder);
             
             // Check the element itself
@@ -184,13 +272,20 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
               break;
             }
             
-            // Check parent
-            const parent = placeholder.parentElement;
-            if (parent && parent.isContentEditable) {
-              replyBox = parent;
-              matchedSelector = "x-placeholder-parent";
-              break;
+            // Check parent hierarchy up to 3 levels
+            let parent = placeholder.parentElement;
+            let level = 0;
+            while (parent && level < 3) {
+              if (parent.isContentEditable || parent.getAttribute('role') === 'textbox') {
+                replyBox = parent;
+                matchedSelector = `x-placeholder-parent-${level}`;
+                break;
+              }
+              parent = parent.parentElement;
+              level++;
             }
+            
+            if (replyBox) break;
             
             // Check siblings
             const siblings = placeholder.parentElement?.children;
@@ -205,6 +300,8 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 }
               }
             }
+            
+            if (replyBox) break;
           }
         }
       }
@@ -276,7 +373,55 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
           let inserted = false;
           
           try {
-            // Method 1: Direct text insertion
+            // IMPROVED: Special handling for X.com with more specific approach
+            if (isTwitterOrX) {
+              console.log("Using improved X.com insertion method");
+              
+              // Take a safer approach with X's React-based interface
+              try {
+                // Focus first to ensure proper event handling
+                replyBox.focus();
+                
+                // Use a safer approach - accumulate text content first
+                const currentText = replyBox.textContent || '';
+                
+                // Check if we shouldn't insert (already there)
+                if (currentText.includes(request.reply)) {
+                  console.log("Text already present, skipping X.com insertion");
+                  sendResponse({ success: true, message: "Text already present" });
+                  return true;
+                }
+                
+                // Use execCommand which is better supported by X.com
+                document.execCommand('insertText', false, request.reply);
+                
+                // Fire a minimal set of events to trigger X's state updates
+                replyBox.dispatchEvent(new Event('input', { bubbles: true }));
+                
+                // Verify insertion
+                if (replyBox.textContent.includes(request.reply)) {
+                  console.log("X.com insertion successful via execCommand");
+                  inserted = true;
+                } else {
+                  // Fallback to direct content manipulation as a last resort
+                  replyBox.textContent = request.reply;
+                  console.log("X.com insertion using direct textContent");
+                  inserted = true;
+                }
+                
+                // If insertion was successful
+                if (inserted) {
+                  sendResponse({ success: true });
+                  return true;
+                }
+              } catch (xError) {
+                console.error("X.com specific insertion failed:", xError);
+              }
+            }
+            
+            // For non-X sites or if X-specific handling failed
+            
+            // Method 1: Direct text insertion for empty fields
             if (!inserted) {
               const currentText = replyBox.textContent || replyBox.innerText || '';
               
@@ -295,7 +440,7 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
               }
             }
             
-            // Method 2: execCommand insertText
+            // Method 2: execCommand insertText (most compatible)
             if (!inserted) {
               replyBox.focus();
               // Only try this once
@@ -303,34 +448,6 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
                 console.log("Reply inserted via execCommand");
                 inserted = true;
               }
-            }
-            
-            // Special handling for X.com
-            if (!inserted && isTwitterOrX) {
-              console.log("Using special X.com insertion method");
-              // Try setting innerHTML 
-              const currentHTML = replyBox.innerHTML;
-              if (!currentHTML || currentHTML === '<br>' || currentHTML === '<br/>') {
-                replyBox.innerHTML = request.reply;
-                inserted = true;
-                console.log("X.com innerHTML insertion successful");
-              } else {
-                // Try direct typing simulation
-                replyBox.focus();
-                document.execCommand('selectAll', false, null);
-                document.execCommand('insertText', false, request.reply);
-                inserted = true;
-                console.log("X.com simulated typing insertion");
-              }
-              
-              // Trigger input events to make sure X.com registers the change
-              replyBox.dispatchEvent(new Event('input', { bubbles: true }));
-              replyBox.dispatchEvent(new Event('change', { bubbles: true }));
-              
-              // Also fire more specific events that Twitter might be listening for
-              ['keydown', 'keyup', 'keypress'].forEach(eventType => {
-                replyBox.dispatchEvent(new KeyboardEvent(eventType, { bubbles: true }));
-              });
             }
             
             // Method 3: Selection-based insertion (last resort)
