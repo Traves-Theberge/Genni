@@ -1,5 +1,3 @@
-# 🤖 Genni
-
 <div align="center">
 
 ![Genni Logo](assets/Genni.png)
@@ -12,8 +10,6 @@
 
 **Genni is your AI-powered reply companion that generates intelligent, context-aware responses using screenshot analysis and OpenAI's Vision API.**
 
-[Installation](#-installation-guide) • [Features](#-key-features) • [Documentation](#-documentation) • [Contributing](#-contributing) • [Support](#-support)
-
 </div>
 
 ## ✨ Why Genni?
@@ -25,23 +21,31 @@
 - 🌐 **Cross-Platform**: Works seamlessly across major messaging platforms
 - ⌨️ **Keyboard Friendly**: Quick access with customizable shortcuts
 
-## 🚀 Quick Start
+## Installation
 
-1. **Install the Extension**
-   ```bash
-   git clone https://github.com/yourusername/Genni.git
-   cd Genni
-   ```
+# Install Genni:
+- Clone or download the repository
+- Click "Load unpacked" in your browser
+- Select the src directory from the downloaded files
+- Enable Developer Mode in your browser:
 
-2. **Set Up Your API Key**
-   - Navigate to extension options
-   - Enter your OpenAI API key
-   - Save configuration
+- Edge: Go to edge://extensions
+- Chrome: Go to chrome://extensions
+- Toggle "Developer mode" switch in the top right
+- Configure the Extension:
 
-3. **Start Using**
-   - Press `Ctrl+Shift+Z` to capture
-   - Review and edit suggested replies
-   - Insert with one click
+- Click the Genni icon in your browser toolbar
+- Open Settings and enter your OpenAI API key
+- Save your settings
+- Start generating smart replies!
+
+# Basic Usage
+- Navigate to any supported messaging platform
+- Press Ctrl+Shift+Z or click the Genni icon
+- Click "Capture Screenshot" to capture the conversation
+- Click "Generate Reply" to create an AI-powered response
+- Click "Insert Reply" to automatically insert the response
+
 
 ## 🎯 Key Features
 
@@ -109,13 +113,6 @@ graph TD
     E --> F[UI Injection]
 ```
 
-## 📚 Documentation
-
-- [Installation Guide](docs/installation.md)
-- [API Configuration](docs/api-config.md)
-- [Development Guide](docs/development.md)
-- [Security Best Practices](docs/security.md)
-
 ## 🔧 Advanced Configuration
 
 ```javascript
@@ -129,7 +126,7 @@ graph TD
 
 ## 🤝 Contributing
 
-We love your input! Check out our [Contributing Guide](CONTRIBUTING.md) to get started.
+We love your input!
 
 1. Fork the Project
 2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
@@ -142,17 +139,7 @@ We love your input! Check out our [Contributing Guide](CONTRIBUTING.md) to get s
 - [ ] 🌍 Multi-language support
 - [ ] 📝 Custom reply templates
 - [ ] 🤖 Advanced AI models integration
-- [ ] 📊 Analytics dashboard
-- [ ] ☁️ Cloud sync capabilities
 
-## 🆘 Support
-
-Need help? We've got you covered:
-
-- 📖 [Documentation Wiki](https://github.com/yourusername/Genni/wiki)
-- 🐛 [Issue Tracker](https://github.com/yourusername/Genni/issues)
-- 📧 [Email Support](mailto:support@genni.ai)
-- 💬 [Community Discord](https://discord.gg/genni)
 
 ## 📄 License
 
@@ -162,8 +149,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 <div align="center">
 
-Made with ❤️ by the Genni team
-
-[Website](https://genni.ai) • [Twitter](https://twitter.com/genniAI) • [Blog](https://blog.genni.ai)
+Made with ❤️ by Traves Theberge
 
 </div>
